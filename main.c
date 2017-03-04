@@ -134,8 +134,10 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
 
 void nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t *usr) {
     //TODO its not easy 
-    //
-    print_diabetes_user_records (usr->num_records-1,usr);
+    /* First check with the last records to make sure
+     * nothing abnormal in last records
+     */
+
     return;
 }
 
