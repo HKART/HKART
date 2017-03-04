@@ -12,6 +12,7 @@ typedef enum sex_s {
 } sex_t;
 #define MAX_NAME_STR 50
 #define MAX_VALID_RECORDS 50
+
 typedef struct users_s
 {
 	uint8_t ID;
@@ -20,6 +21,7 @@ typedef struct users_s
 	uint64_t phone;
 	/*TODO we are currently evaluating only diabetes */
 	diabetes_panel_t diabetes_report[MAX_VALID_RECORDS];
+        uint8_t num_records;
 } users_t;
 
 

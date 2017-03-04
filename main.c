@@ -1,3 +1,9 @@
+/**
+ * copyright HKART 2017
+ * we are using Dr Lal Path Lab as our reference
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,6 +11,8 @@
 
 #define MAX_FILE_NAME 50
 #define MAX_DIABETES_TEST 10
+
+diabetes_panel_ref_t ref_diabetes;
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void usage (void) {
@@ -77,6 +85,7 @@ int parse_csv_diabetes (FILE *fp, users_t *usr) {
         }
         /* will go to the next records */
         count ++;
+        usr->num_records = count;
     }
 }
 /* Helper function to print a record */
@@ -96,6 +105,38 @@ void print_diabetes_user_records (int record_num, users_t *usr) {
             usr->diabetes_report[record_num].Creatinine,
             usr->diabetes_report[record_num].HbA1c,
             usr->diabetes_report[record_num].Microalbumin_Urine);
+}
+
+void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
+    ref_diabetes->Glucose_Fasting_min = 70.0;
+    ref_diabetes->Glucose_Fasting_max = 100.0;
+    ref_diabetes->Glucose_PP_min = 70.0;
+    ref_diabetes->Glucose_PP_max = 140.0;
+    ref_diabetes->Uric_Acid_min = 40.0;
+    ref_diabetes->Uric_Acid_max = 60.0;
+    ref_diabetes->Microalbumin_Urine_min = -1.0; //Not Applicable
+    ref_diabetes->Microalbumin_Urine_max = 30.0;
+    ref_diabetes->HbA1c_min = 4.0;
+    ref_diabetes->HbA1c_max = 6.0;
+    ref_diabetes->Cholesterol_Total_min = -1.0; //N/A
+    ref_diabetes->Cholesterol_Total_max = 200.0;
+    ref_diabetes->Triglycerides_min = -1; //N/A
+    ref_diabetes->Triglycerides_max = 150.0;
+    ref_diabetes->LDL_Cholesterol_min = -1.0; // N/A
+    ref_diabetes->LDL_Cholesterol_max = 100.0;
+    ref_diabetes->HDL_Cholesterol_min = 40.0; //Major risk cardiac attack
+    ref_diabetes->HDL_Cholesterol_max = 60.0; // The higher the better
+    ref_diabetes->Creatinine_min = 0.6;
+    ref_diabetes->Creatinine_max = 1.2;
+
+    return;
+}
+
+void nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t *usr) {
+    //TODO its not easy 
+    //
+    print_diabetes_user_records (usr->num_records-1,usr);
+    return;
 }
 
 int main(int argc, char *argv[]) {
@@ -119,8 +160,9 @@ int main(int argc, char *argv[]) {
 		printf ("Unable to open %s",file_name);
 		return -1; //error
 	}
+        fill_up_diabetes_ref (&ref_diabetes, 0); //for now age is not in consideration
         parse_csv_diabetes (fp, &user);
-        print_diabetes_user_records (1,&user);
+        nail_down_predictions (&ref_diabetes,&user);
         fclose (fp);
 	return 0;//success
 }
