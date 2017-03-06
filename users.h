@@ -5,10 +5,10 @@
 #include <stdint.h>
 
 typedef enum sex_s {
-	MALE = 0,
-	FEMALE = 1,
-	INTERSEX = 2,
-	SEX_MAX = 4
+    MALE = 0,
+    FEMALE = 1,
+    INTERSEX = 2,
+    SEX_MAX = 4
 } sex_t;
 #define MAX_NAME_STR 50
 #define MAX_VALID_RECORDS 50
