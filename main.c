@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "users.h"
+#include "math_work.h"
 
 #define MAX_FILE_NAME 50
 #define MAX_DIABETES_TEST 10
@@ -38,7 +39,7 @@ const char* getfield(char* line, int num)
     return NULL;
 }
 int parse_csv_diabetes (FILE *fp, users_t *usr) {
-    uint8_t buf[100];
+    char buf[100];
     uint8_t count = 0;
     while( fgets(buf,sizeof(buf),fp) != NULL)
     {
@@ -46,7 +47,7 @@ int parse_csv_diabetes (FILE *fp, users_t *usr) {
         if (count == MAX_VALID_RECORDS -1)
             break;
         for (;records <= MAX_DIABETES_TEST; ++records) {
-            uint8_t *tmp = strdup (buf);
+            char *tmp = strdup (buf);
             switch (records) {
                 case 1:
                     usr->diabetes_report[count].Glucose_Fasting = atof(getfield(tmp,records));
@@ -132,11 +133,175 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
     return;
 }
 
+/**
+ * return 0 if val is in normal range
+ * return 1 if val is lesser than min value of reference
+ * return 2 if val is greater than max value of reference
+ * return 3 if val is equal to min value of reference
+ * return 4 if val is equal to max value of reference
+ */
+
+int check_against_ref_value (float std_min, float std_max, float val) {
+	int ret = 0;
+	if (std_min != -1) {
+		if (val == std_min)
+			ret = 3;
+		if (val < std_min)
+			ret = 1;
+	}
+	if (val == std_max)
+		ret = 4;
+	if (val > std_max)
+		ret = 2;
+	return ret;
+}
+void print_details_analysis (int ret,float val,float ref_min,float ref_max,float sd ,char event[120]) {
+	switch (ret) {
+		case 0:
+			printf ("%s :Your Value - %f Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
+			break;
+		case 1:
+			printf ("!!! Attention : abnormality seen in %s \n\r",event);
+			printf ("%s : Your Value - [%f] Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
+			break;
+		case 2:
+			printf ("!!! Attention : abnormality seen in %s \n\r",event);
+			printf ("%s : Your Value - [%f] Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
+			break;
+		case 3:
+			printf ("!!! Attention : reached the min reference value %s \n\r",event);
+			printf ("%s : Your Value - [%f] Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
+			break;
+		case 4:
+			printf ("!!! Attention : reached the max reference value %s \n\r",event);
+			printf ("%s : Your Value - [%f] Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
+			break;
+		default:
+			break;
+	}
+	printf ("\n\r");
+	printf ("Deviation of %s --> %f\n\r",event,sd);
+}
+
 void nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t *usr) {
-    //TODO its not easy 
+
+    //TODO its not easy
     /* First check with the last records to make sure
      * nothing abnormal in last records
      */
+	int num_records = usr->num_records;
+	float data[MAX_VALID_RECORDS];
+	int i = 0;
+	int ret = 0;
+	/* sd for Glucose_Fasting */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Glucose_Fasting;
+	}
+	float sd_Glucose_Fasting = calculateSD (data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Glucose_Fasting_min,ref_diabetes->Glucose_Fasting_max,usr->diabetes_report[i-1].Glucose_Fasting);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Glucose_Fasting,
+							ref_diabetes->Glucose_Fasting_min,ref_diabetes->Glucose_Fasting_max,sd_Glucose_Fasting,"Glucose_Fasting");
+
+	/* sd for Glucose_PP */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Glucose_PP;
+	}
+	float sd_Glucose_PP = calculateSD (data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Glucose_PP_min,ref_diabetes->Glucose_PP_max,usr->diabetes_report[i-1].Glucose_PP);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Glucose_PP,
+							ref_diabetes->Glucose_PP_min,ref_diabetes->Glucose_PP_max,sd_Glucose_PP,"Glucose_PP");
+
+	/* sd for Cholesterol_Total */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Cholesterol_Total;
+	}
+	float sd_Cholesterol_Total = calculateSD (data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Cholesterol_Total_min,ref_diabetes->Cholesterol_Total_max,usr->diabetes_report[i-1].Cholesterol_Total);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Cholesterol_Total,
+							ref_diabetes->Cholesterol_Total_min,ref_diabetes->Cholesterol_Total_max,sd_Cholesterol_Total,"Cholesterol_Total");
+
+	/* sd for Triglycerides */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Triglycerides;
+	}
+	float sd_Triglycerides = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Triglycerides_min,ref_diabetes->Triglycerides_max,usr->diabetes_report[i-1].Triglycerides);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Triglycerides,
+							ref_diabetes->Triglycerides_min,ref_diabetes->Triglycerides_max,sd_Triglycerides,"Triglycerides");
+
+	/* sd for HDL_Cholesterol */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].HDL_Cholesterol;
+	}
+	float sd_HDL_Cholesterol = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->HDL_Cholesterol_min,ref_diabetes->HDL_Cholesterol_max,usr->diabetes_report[i-1].HDL_Cholesterol);
+	print_details_analysis (ret,usr->diabetes_report[i-1].HDL_Cholesterol,
+							ref_diabetes->HDL_Cholesterol_min,ref_diabetes->HDL_Cholesterol_max,sd_HDL_Cholesterol,"HDL_Cholesterol");
+
+	/* sd for LDL_Cholesterol */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].LDL_Cholesterol;
+	}
+	float sd_LDL_Cholesterol = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->LDL_Cholesterol_min,ref_diabetes->LDL_Cholesterol_max,usr->diabetes_report[i-1].LDL_Cholesterol);
+	print_details_analysis (ret,usr->diabetes_report[i-1].LDL_Cholesterol,
+							ref_diabetes->LDL_Cholesterol_min,ref_diabetes->LDL_Cholesterol_max,sd_LDL_Cholesterol,"LDL_Cholesterol");
+
+	/* sd for Uric_Acid */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Uric_Acid;
+	}
+	float sd_Uric_Acid = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Uric_Acid_min,ref_diabetes->Uric_Acid_max,usr->diabetes_report[i-1].Uric_Acid);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Uric_Acid,
+							ref_diabetes->Uric_Acid_min,ref_diabetes->Uric_Acid_max,sd_Uric_Acid,"Uric_Acid");
+
+	/* sd for Creatinine */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Creatinine;
+	}
+	float sd_Creatinine = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Creatinine_min,ref_diabetes->Creatinine_max,usr->diabetes_report[i-1].Creatinine);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Creatinine,
+							ref_diabetes->Creatinine_min,ref_diabetes->Creatinine_max,sd_Creatinine,"Creatinine");
+
+	/* sd for HbA1c VVIP Need to handle very carefully */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].HbA1c;
+	}
+	float sd_HbA1c = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->HbA1c_min,ref_diabetes->HbA1c_max,usr->diabetes_report[i-1].HbA1c);
+	print_details_analysis (ret,usr->diabetes_report[i-1].HbA1c,
+							ref_diabetes->HbA1c_min,ref_diabetes->HbA1c_max,sd_HbA1c,"HbA1c");
+
+	/* sd for Microalbumin_Urine */
+	for (i = 0; i< num_records; ++i)
+	{
+		data[i] = usr->diabetes_report[i].Microalbumin_Urine;
+	}
+	float sd_Microalbumin_Urine = calculateSD(data,num_records);
+	/* check the latest records with ref value */
+	ret = check_against_ref_value(ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,usr->diabetes_report[i-1].Microalbumin_Urine);
+	print_details_analysis (ret,usr->diabetes_report[i-1].Microalbumin_Urine,
+							ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,sd_Microalbumin_Urine,"Microalbumin_Urine");
 
     return;
 }
@@ -150,11 +315,11 @@ int main(int argc, char *argv[]) {
 		exit (0);
 	}
         /* copy the user name & phone number */
-        strncpy (user.name,argv[1],MAX_NAME_STR);
+        strncpy ((char *)user.name,argv[1],MAX_NAME_STR);
         user.phone = atol (argv[2]);
         printf ("##### Welcome %s #####\n\r",user.name);
 
-	uint8_t file_name[MAX_FILE_NAME];
+	char file_name[MAX_FILE_NAME];
 	sprintf(file_name, "%s_%s.csv", argv[1],argv[2]);
 	/* open the patient csv file in read only mode */
 	fp = fopen (file_name,"r");

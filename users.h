@@ -15,13 +15,13 @@ typedef enum sex_s {
 
 typedef struct users_s
 {
-	uint8_t ID;
-	uint8_t name[MAX_NAME_STR];
-	sex_t sex;
-	uint64_t phone;
-	/*TODO we are currently evaluating only diabetes */
-	diabetes_panel_t diabetes_report[MAX_VALID_RECORDS];
-        uint8_t num_records;
+    uint8_t ID;
+    uint8_t name[MAX_NAME_STR];
+    sex_t sex;
+    uint64_t phone;
+    /*TODO we are currently evaluating only diabetes */
+    diabetes_panel_t diabetes_report[MAX_VALID_RECORDS];
+    uint8_t num_records;
 } users_t;
 
 
