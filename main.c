@@ -158,6 +158,7 @@ int check_against_ref_value (float std_min, float std_max, float val) {
 void print_details_analysis (int ret,float val,float ref_min,float ref_max,float sd ,char event[120]) {
     switch (ret) {
         case 0:
+            printf ("NORMAL\n\r");
             printf ("%s :Your Value - %f Reference - [ min %f - max %f ]",event,val,ref_min,ref_max);
             break;
         case 1:
