@@ -40,4 +40,6 @@ typedef struct diabetes_panel_ref_s {
     float Microalbumin_Urine_max;
 } diabetes_panel_ref_t;
 
+int ca_diabetes (char *name, char *phone);
+
 #endif /* HKART_DIABETES_H */
