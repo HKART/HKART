@@ -27,18 +27,26 @@ static inline int detect_changing_trends (float data[], int num_elements)
     int i;
     int flag_inc = 0;
     int flag_dec = 0;
+    int result_inc = 1;
+    int result_dec = 1;
     for (i = 0; i< num_elements-1; ++i) {
         if (data[i+1]>data[i]) 
             flag_inc ++;
+        else
+            flag_inc = 0;
+        result_inc = 1*flag_inc;
     }
     for (i = 0; i< num_elements-1; ++i) {
         if (data[i+1]< data[i]) 
             flag_dec ++;
+        else
+            flag_dec = 0;
+        result_dec = 1*flag_dec;
     }
 
-    if (flag_inc == (num_elements-1))
+    if (result_inc > 1)
         return 1;
-    if (flag_dec == (num_elements-1))
+    if (result_dec > 1)
         return 2;
     return 0;
 }

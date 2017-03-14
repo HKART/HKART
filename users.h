@@ -2,6 +2,7 @@
 #define USER_H
 
 #include "hkart_diabetes.h"
+#include "hkart_kidney.h"
 #include <stdint.h>
 
 typedef enum sex_s {
@@ -21,7 +22,9 @@ typedef struct users_s
     uint64_t phone;
     /*TODO we are currently evaluating only diabetes */
     diabetes_panel_t diabetes_report[MAX_VALID_RECORDS];
-    uint8_t num_records;
+    uint8_t num_records_diabetes;
+    kidney_panel_t kidney_report[MAX_VALID_RECORDS];
+    uint8_t num_kidney_records;
 } users_t;
 
 

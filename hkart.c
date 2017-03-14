@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "hkart_diabetes.h"
+#include "hkart_kidney.h"
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void usage (void) {
@@ -30,7 +31,7 @@ int main(int argc, char *argv[]) {
     else if (!(strcmp(argv[3],"cardiac")))
         printf ("Not supported\n\r");
     else if (!(strcmp(argv[3],"kidney")))
-        printf ("Not supported, development is in progress\n\r");
+        ret = ca_kidney (argv[1],argv[2]);
     else if (!(strcmp(argv[3],"liver")))
         printf ("NA now, we are working on it\n\r");
     else {
