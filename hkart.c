@@ -9,6 +9,7 @@
 #include <string.h>
 #include "hkart_diabetes.h"
 #include "hkart_kidney.h"
+#include "hkart_liver.h"
 
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 void usage (void) {
@@ -33,7 +34,7 @@ int main(int argc, char *argv[]) {
     else if (!(strcmp(argv[3],"kidney")))
         ret = ca_kidney (argv[1],argv[2]);
     else if (!(strcmp(argv[3],"liver")))
-        printf ("NA now, we are working on it\n\r");
+        ret = ca_liver (argv[1],argv[2]);
     else {
         printf ("profile not supported\n\r");
         usage ();

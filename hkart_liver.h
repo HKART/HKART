@@ -15,34 +15,35 @@ typedef struct liver_panel_s {
     float Protein_Total; 
     float Albumin;
     /* no unit */
-    float A:G_Ratio;
+    float A_G_Ratio;
 }liver_panel_t;
 
 typedef struct liver_panel_ref_s {
     /* unit U/L */
-    float AST_SGOT_min; 
+    float AST_SGOT_min; /* 5 to 40 U/L */ 
     float AST_SGOT_max; 
-    float ALT_SGPT_min;
+    float ALT_SGPT_min; /* 7 to 56 U/L */
     float ALT_SGPT_max;
-    float GGTP_min;
+    float GGTP_min; /* TODO  for now make it 4-6*/
     float GGTP_max;
-    float ALP_min; 
+    float ALP_min; /* 44 to 147 */
     float ALP_max; 
     /* unit mg/dl */
-    float Bilirubin_Total_min;
+    float Bilirubin_Total_min; /* 0.3 to 1.0 mg/dL */
     float Bilirubin_Total_max;
     float Bilirubin_Direct_min; 
-    float Bilirubin_Direct_max; 
-    float Bilirubin_Indirect_min;
+    float Bilirubin_Direct_max; /* 0.1 to 0.3 mg/dL */
+    float Bilirubin_Indirect_min; /* 0.2–0.7 mg/dL */
     float Bilirubin_Indirect_max;
     /* unit g/dl */
-    float Protein_Total_min; 
+    float Protein_Total_min; /* 6.4-8.3 */
     float Protein_Total_max; 
-    float Albumin_min;
+    float Albumin_min; /* 3.5-5.0 g/dL */
     float Albumin_max;
     /* no unit */
-    float A:G_Ratio_min;
-    float A:G_Ratio_max;
+    float A_G_Ratio_min;/* 0.8-2.0*/
+    float A_G_Ratio_max;
 }liver_panel_ref_t;
 
+int ca_liver (char *name, char *phone);
 #endif /* HKART_LIVER_H */
