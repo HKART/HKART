@@ -5,7 +5,6 @@ typedef struct liver_panel_s {
     /* unit U/L */
     float AST_SGOT; 
     float ALT_SGPT;
-    float GGTP;
     float ALP; 
     /* unit mg/dl */
     float Bilirubin_Total;
@@ -24,8 +23,6 @@ typedef struct liver_panel_ref_s {
     float AST_SGOT_max; 
     float ALT_SGPT_min; /* 7 to 56 U/L */
     float ALT_SGPT_max;
-    float GGTP_min; /* TODO  for now make it 4-6*/
-    float GGTP_max;
     float ALP_min; /* 44 to 147 */
     float ALP_max; 
     /* unit mg/dl */
