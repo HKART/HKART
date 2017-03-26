@@ -4,6 +4,7 @@
 #include "hkart_diabetes.h"
 #include "hkart_kidney.h"
 #include "hkart_liver.h"
+#include "hkart_cardiac.h"
 #include <stdint.h>
 
 typedef enum sex_s {
@@ -28,6 +29,8 @@ typedef struct users_s
     uint8_t num_kidney_records;
     liver_panel_t liver_report[MAX_VALID_RECORDS];
     uint8_t num_liver_records;
+    cardiac_panel_t cardiac_report[MAX_VALID_RECORDS];
+    uint8_t num_records_cardiac;
 } users_t;
 
 

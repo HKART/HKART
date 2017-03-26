@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     if (!(strcmp(argv[3],"diabetes")))
         ret = ca_diabetes (argv[1],argv[2]);
     else if (!(strcmp(argv[3],"cardiac")))
-        printf ("Not supported\n\r");
+        ret = ca_cardiac(argv[1],argv[2]);
     else if (!(strcmp(argv[3],"kidney")))
         ret = ca_kidney (argv[1],argv[2]);
     else if (!(strcmp(argv[3],"liver")))
