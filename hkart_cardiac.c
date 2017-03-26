@@ -104,15 +104,15 @@ int parse_csv_cardiac (FILE *fp, users_t *usr) {
  */
 void fill_up_cardiac_ref (cardiac_panel_ref_t *ref_cardiac, int age) {
     ref_cardiac->Apolipoprotein_A1_max = 120.0;
-    ref_cardiac->Apolipoprotein_A1_min = -1;
+    ref_cardiac->Apolipoprotein_A1_min = 120.0; // lower that this will cause cardiovascular disease
     ref_cardiac->Apolipoprotein_B_max = 125;
     ref_cardiac->Apolipoprotein_A1_min = 40;
-    ref_cardiac->Lipoprotein_A_max = 10;
-    ref_cardiac->Lipoprotein_A_min = -1;
-    ref_cardiac->S_Homocysteine_max = 12;
-    ref_cardiac->S_Homocysteine_min = -1;
+    ref_cardiac->Lipoprotein_A_max = 10; // the higher cardiovascular risk
+    ref_cardiac->Lipoprotein_A_min = -1; // the lower the better
+    ref_cardiac->S_Homocysteine_max = 15;// the higher the risk (kidney)
+    ref_cardiac->S_Homocysteine_min = 4; // lower the better
     ref_cardiac->S_Fibrinogen_max = 400;
-    ref_cardiac->S_Fibrinogen_min = 150;
+    ref_cardiac->S_Fibrinogen_min = 150;//lower that 100 is very risky
 
     return;
 }

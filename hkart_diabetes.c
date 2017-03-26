@@ -131,7 +131,7 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
     ref_diabetes->Cholesterol_Total_max = 200.0;
     ref_diabetes->Triglycerides_min = -1; //N/A
     ref_diabetes->Triglycerides_max = 150.0;
-    ref_diabetes->LDL_Cholesterol_min = -1.0; // N/A
+    ref_diabetes->LDL_Cholesterol_min = -1.0; // the lower the better
     ref_diabetes->LDL_Cholesterol_max = 100.0;
     ref_diabetes->HDL_Cholesterol_min = 40.0; //Major risk cardiac attack
     ref_diabetes->HDL_Cholesterol_max = 60.0; // The higher the better
