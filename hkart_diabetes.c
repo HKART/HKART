@@ -129,7 +129,7 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
     ref_diabetes->HbA1c_max = 6.0;
     ref_diabetes->Cholesterol_Total_min = -1.0; //N/A
     ref_diabetes->Cholesterol_Total_max = 200.0;
-    ref_diabetes->Triglycerides_min = -1; //N/A
+    ref_diabetes->Triglycerides_min = -1; //less than 150 is normal
     ref_diabetes->Triglycerides_max = 150.0;
     ref_diabetes->LDL_Cholesterol_min = -1.0; // the lower the better
     ref_diabetes->LDL_Cholesterol_max = 100.0;
