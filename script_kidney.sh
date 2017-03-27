@@ -2,7 +2,7 @@
 
 echo "set terminal png
 set output '$1'
-set terminal png size 1000,1000
+set terminal png font arial 25 size 1600,1200
 plot 'tmp1' using 1 with linespoints title 'Glucose_Fasting', \
      'tmp2' using 1 with linespoints title 'Urea', \
      'tmp3' using 1 with linespoints title 'Creatinine', \
