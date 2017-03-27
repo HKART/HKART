@@ -25,30 +25,18 @@ static inline float calculateSD(float data[], int num_elements)
 static inline int detect_changing_trends (float data[], int num_elements)
 {
     int i;
-    int flag_inc = 0;
-    int flag_dec = 0;
-    int result_inc = 1;
-    int result_dec = 1;
+    float base = 20000.0;
+    float base_copy = base;
     for (i = 0; i< num_elements-1; ++i) {
         if (data[i+1]>data[i]) 
-            flag_inc ++;
+            base = base + (data[i+1]-data[i]);
         else
-            flag_inc = 0;
-        result_inc = 1*flag_inc;
+            base = base - (data[i]-data[i+1]);
     }
-    for (i = 0; i< num_elements-1; ++i) {
-        if (data[i+1]< data[i]) 
-            flag_dec ++;
-        else
-            flag_dec = 0;
-        result_dec = 1*flag_dec;
-    }
+    //rare case
+    if (base_copy == base) return 0;
 
-    if (result_inc > 1)
-        return 1;
-    if (result_dec > 1)
-        return 2;
-    return 0;
+    return (base > base_copy?1:2);
 }
 
 
