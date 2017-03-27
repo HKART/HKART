@@ -36,6 +36,129 @@
 #define MAX_FILE_NAME 50
 #define MAX_DIABETES_TEST 10
 
+enum diabetes_panel_map {
+    GF = 1,
+    GP = 2,
+    CT = 3,
+    TG = 4,
+    HDLC = 5,
+    LDLC = 6,
+    UA = 7,
+    CR = 8,
+    HBA1C = 9,
+    MU = 10,
+};
+
+void print_detail_diabets_summary (float val,float min, float max,float sd, float ct,int code) {
+    switch (code) {
+        case GF:
+            printf ("Glucose_Fasting :\n\r");
+            if (val >= 100 && val <= 125)
+                printf ("You have prediabetes.\n\r");
+            else if (val >= 90 && val < 100 && sd && (ct == 1))
+                printf ("Chances of prediabetes is high.\n\r");
+            else if (val > 125)
+                printf ("You have diabetes.\n\r");
+            else 
+                printf ("Normal.\n\r");
+            break;
+        case GP:
+            printf ("Glucose_PP :\n\r");
+            if (val > 140)
+                printf ("You have diabetes.\n\r");
+            else if (val >= 130 && val <140 && sd && (ct == 1))
+                printf ("Chances of prediabetes.\n\r");
+            else 
+                printf ("Normal.\n\r");
+            break;
+        case CT:
+            printf ("Cholesterol_Total: \n\r");
+            if (val >=200 && val <=239)
+                printf("Borderline high.\n\r");
+            else if (val >=240)
+                printf ("High.\n\r");
+            else
+                printf ("Normal.\n\r");
+
+            break;
+        case TG:
+            printf ("Triglycerides:\n\r");
+            if (val < 150)
+                printf ("Normal.\n\r");
+            else if (val >=150 && val <=199)
+                printf ("Borderline high.\n\r");
+            else if (val > 199) {
+                printf ("High.\n\r");
+                if (sd && (ct == 1))
+                    printf("Chances of Kidney disease.\n\r");
+            }
+            break;
+        case HDLC:
+            printf ("HDL_Cholesterol:\n\r");
+            if (val < 40)
+                printf ("A major risk factor for heart disease.\n\r");
+            else if (val >=40 && val <=59) {
+                if (val < 45 && sd && (ct == 2))
+                    printf ("Chances of risk factor for heart disease.\n\r");
+                else
+                    printf ("Normal, The higher, the better.\n\r");
+            }
+            else 
+                printf ("Normal, Considered protective against heart disease.\n\r");
+            break;
+        case LDLC:
+            printf ("LDL_Cholesterol:\n\r");
+            if (val > 190)
+                printf ("Very High.\n\r");
+            else if (val >=160 && val <=189)
+                printf ("High.\n\r");
+            else if (val >= 130 && val <=159)
+                printf ("Borderline high.\n\r");
+            else if (val >=100 && val <=129)
+                printf ("Considered near ideal.\n\r");
+            else 
+                printf ("Normal,ideal for people at very high risk of heart disease\n\r");
+            break;
+        case UA:
+            printf ("Uric_Acid:\n\r");
+            if (val > 7.2)
+                printf ("You have High Uric Acid.\n\r");
+            else if (val >= 6 && sd && (ct == 1))
+                printf ("Chances of getting Uric Acid is high.\n\r");
+            else 
+                printf ("Normal.\n\r");
+            break;
+        case CR:
+            break;
+        case HBA1C:
+            printf ("HbA1c:\n\r");
+            if (val > 6)
+                printf ("you have diabetes.\n\r");
+            else if (val >= 5.6 && sd && (ct == 1))
+                printf ("Higher change of getting of diabetes.\n\r");
+            else
+                printf ("Normal.\n\r");
+            break;
+        case MU:
+            printf ("Microalbumin_Urine:\n\r");
+            if (val >= 30 && val <=300)
+                printf ("You have Microalbuminuria.\n\r");
+            else if (val > 300) {
+                printf ("You have Clinical albuminuria.\n\r");
+            }
+            else {
+                if (val > 27 && sd && (ct == 1))
+                    printf ("Normal,Chances of getting Microalbuminuria.\n\r");
+                else
+                    printf ("Normal.\n\r");
+            }
+            break;
+        default:
+            break;
+    }
+    return;
+}
+
 diabetes_panel_ref_t ref_diabetes;
 /**
  * parse the csv file for a specific user
@@ -121,8 +244,8 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
     ref_diabetes->Glucose_Fasting_max = 100.0;
     ref_diabetes->Glucose_PP_min = 70.0;
     ref_diabetes->Glucose_PP_max = 140.0;
-    ref_diabetes->Uric_Acid_min = 40.0;
-    ref_diabetes->Uric_Acid_max = 60.0;
+    ref_diabetes->Uric_Acid_min = 3.4;
+    ref_diabetes->Uric_Acid_max = 7.2;
     ref_diabetes->Microalbumin_Urine_min = -1.0; //Not Applicable
     ref_diabetes->Microalbumin_Urine_max = 30.0;
     ref_diabetes->HbA1c_min = 4.0;
@@ -134,7 +257,7 @@ void fill_up_diabetes_ref (diabetes_panel_ref_t *ref_diabetes, int age) {
     ref_diabetes->LDL_Cholesterol_min = -1.0; // the lower the better
     ref_diabetes->LDL_Cholesterol_max = 100.0;
     ref_diabetes->HDL_Cholesterol_min = 40.0; //Major risk cardiac attack
-    ref_diabetes->HDL_Cholesterol_max = 60.0; // The higher the better
+    ref_diabetes->HDL_Cholesterol_max = -1; // The higher the better
     ref_diabetes->Creatinine_min = 0.6;
     ref_diabetes->Creatinine_max = 1.2;
 
@@ -275,6 +398,35 @@ void diabetes_nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t
     ret = check_against_ref_value(ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,usr->diabetes_report[i-1].Microalbumin_Urine);
     print_details_analysis (ret,usr->diabetes_report[i-1].Microalbumin_Urine,
             ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,sd_Microalbumin_Urine,ct_Microalbumin_Urine,"Microalbumin_Urine");
+
+    printf ("PREDICTIONS and SUMMARY:\n\r");
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Glucose_Fasting,
+            ref_diabetes->Glucose_Fasting_min,ref_diabetes->Glucose_Fasting_max,sd_Glucose_Fasting,ct_Glucose_Fasting,GF);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Glucose_PP,
+            ref_diabetes->Glucose_PP_min,ref_diabetes->Glucose_PP_max,sd_Glucose_PP,ct_Glucose_PP,GP);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Cholesterol_Total,
+            ref_diabetes->Cholesterol_Total_min,ref_diabetes->Cholesterol_Total_max,sd_Cholesterol_Total,ct_Cholesterol_Total,CT);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Triglycerides,
+            ref_diabetes->Triglycerides_min,ref_diabetes->Triglycerides_max,sd_Triglycerides,ct_Triglycerides,TG);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].HDL_Cholesterol,
+            ref_diabetes->HDL_Cholesterol_min,ref_diabetes->HDL_Cholesterol_max,sd_HDL_Cholesterol,ct_HDL_Cholesterol,HDLC);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].LDL_Cholesterol,
+            ref_diabetes->LDL_Cholesterol_min,ref_diabetes->LDL_Cholesterol_max,sd_LDL_Cholesterol,ct_LDL_Cholesterol,LDLC);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Uric_Acid,
+            ref_diabetes->Uric_Acid_min,ref_diabetes->Uric_Acid_max,sd_Uric_Acid,ct_Uric_Acid,UA);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].HbA1c,
+            ref_diabetes->HbA1c_min,ref_diabetes->HbA1c_max,sd_HbA1c,ct_HbA1c,HBA1C);
+
+    print_detail_diabets_summary (usr->diabetes_report[i-1].Microalbumin_Urine,
+            ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,sd_Microalbumin_Urine,ct_Microalbumin_Urine,MU);
 
     return;
 }

@@ -44,8 +44,8 @@ void fillup_kidney_ref (kidney_panel_ref_t *ref_kidney,int age) {
     ref_kidney->Urea_max = 20.0;
     ref_kidney->Creatinine_min = 0.6;
     ref_kidney->Creatinine_max = 1.2;
-    ref_kidney->Uric_Acid_min = 40.0;
-    ref_kidney->Uric_Acid_max = 60.0;
+    ref_kidney->Uric_Acid_min = 3.4;
+    ref_kidney->Uric_Acid_max = 7.2;
     ref_kidney->Calcium_min = 8.5;
     ref_kidney->Calcium_max = 10.2;
     ref_kidney->Phosphorus_min = 2.5;
