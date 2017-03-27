@@ -67,7 +67,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             if (val > 140)
                 printf ("You have diabetes.\n\r");
             else if (val >= 130 && val <140 && sd && (ct == 1))
-                printf ("Chances of prediabetes.\n\r");
+                printf ("Good chances of prediabetes.\n\r");
             else 
                 printf ("Normal.\n\r");
             break;
@@ -99,7 +99,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
                 printf ("A major risk factor for heart disease.\n\r");
             else if (val >=40 && val <=59) {
                 if (val < 45 && sd && (ct == 2))
-                    printf ("Chances of risk factor for heart disease.\n\r");
+                    printf ("Good chances of risk factor for heart disease.\n\r");
                 else
                     printf ("Normal, The higher, the better.\n\r");
             }
@@ -109,9 +109,13 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
         case LDLC:
             printf ("LDL_Cholesterol:\n\r");
             if (val > 190)
-                printf ("Very High.\n\r");
-            else if (val >=160 && val <=189)
-                printf ("High.\n\r");
+                printf ("Very High. !!! High chances of cardiovascular disease.\n\r");
+            else if (val >=160 && val <=189) {
+                if (sd && (ct == 1))
+                    printf ("High. !! Good chances of cardiovascular disease.\n\r");
+                else
+                    printf ("High, Chances of cardiovascular disease.\n\r");
+            }
             else if (val >= 130 && val <=159)
                 printf ("Borderline high.\n\r");
             else if (val >=100 && val <=129)
