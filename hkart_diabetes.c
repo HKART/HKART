@@ -66,7 +66,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             printf ("Glucose_PP :\n\r");
             if (val > 140)
                 printf ("You have diabetes.\n\r");
-            else if (val >= 130 && val <140 && sd && (ct == 1))
+            else if (val >= 130 && val <=140 && sd && (ct == 1))
                 printf ("Good chances of prediabetes.\n\r");
             else 
                 printf ("Normal.\n\r");
