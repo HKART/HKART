@@ -50,9 +50,8 @@ void print_detail_cardiac_summary (float val,float min, float max,float sd, floa
             printf ("Apolipoprotein_A1:\n\r");
             if (val < 120) {
                 printf ("Low. High Risk of cardiovascular disease/liver disease/kidney disease.\n\r");
-            }else if (val <= 140) {
-                if (sd && (ct == 2))
-                    printf ("Normal, But chances of cardiovascular disease/liver disease/kidney disease.\n\r");
+            }else if (val <= 140 && sd && (ct == 2)) {
+                printf ("Normal, But chances of cardiovascular disease/liver disease/kidney disease.\n\r");
             }
             else {
                 printf ("Normal.\n\r");
@@ -64,34 +63,31 @@ void print_detail_cardiac_summary (float val,float min, float max,float sd, floa
             if (val > 130) {
                 printf ("Eleveted. Risk of cardiovascular disease.\n\r");
             }
-            else if (val >= 120) {
-                if (sd && (ct == 1))
-                    printf ("Normal. But Chances of cardiovascular disease.\n\r");
+            else if (val >= 120 && sd && (ct == 1)) {
+                printf ("Normal. But Chances of cardiovascular disease.\n\r");
             }
             else if (val < 40) {
                 printf ("Low.\n\r");
                 printf ("Note: low apoB levels include the following.\n\r");
                 printf("Liver cirrhosis, Malnutrition, Hyperthyroidism.\n\r");
-            }else if (val < 50) {
-                if (sd && (ct == 2)) {
-                    printf ("Normal. But getting low over time.\n\r");
-                    printf ("Note: low apoB levels include the following.\n\r");
-                    printf("Liver cirrhosis, Malnutrition, Hyperthyroidism.\n\r");
-                }
+            }else if (val <= 50 && sd && (ct == 2)) {
+                printf ("Normal. But getting low over time.\n\r");
+                printf ("Note: low apoB levels include the following.\n\r");
+                printf("Liver cirrhosis, Malnutrition, Hyperthyroidism.\n\r");
             }
             else 
                 printf ("Normal\n\r");
             break;
         case LIPA:
             printf ("Lipoprotein_A:\n\r");
-            if (val <= 15) {
-                printf ("Normal.\n\r");
-            }else if (val >= 30) {
+            if (val >= 30) {
                 printf ("High. !!! increased risk of atherosclerosis, heart attack, or stroke.\n\r");
             }
             else if (val > 15 && sd && (ct == 1)) {
                 printf ("Normal, but increased risk of heart attack or stroke.\n\r");
             }
+            else
+                printf("Normal.\n\r");
             break;
         case SHOM:
             break;
