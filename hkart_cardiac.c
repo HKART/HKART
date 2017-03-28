@@ -36,6 +36,73 @@
 #define MAX_FILE_NAME 50
 #define MAX_CARDIAC_TEST 5
 
+enum {
+    APA1 = 1,
+    APB,
+    LIPA,
+    SHOM,
+    SFIB,
+};
+
+void print_detail_cardiac_summary (float val,float min, float max,float sd, float ct,int code) {
+    switch (code) {
+        case APA1:
+            printf ("Apolipoprotein_A1:\n\r");
+            if (val < 120) {
+                printf ("Low. High Risk of cardiovascular disease/liver disease/kidney disease.\n\r");
+            }else if (val <= 140) {
+                if (sd && (ct == 2))
+                    printf ("Normal, But chances of cardiovascular disease/liver disease/kidney disease.\n\r");
+            }
+            else {
+                printf ("Normal.\n\r");
+            }
+
+            break;
+        case APB:
+            printf ("Apolipoprotein_B:\n\r");
+            if (val > 130) {
+                printf ("Eleveted. Risk of cardiovascular disease.\n\r");
+            }
+            else if (val >= 120) {
+                if (sd && (ct == 1))
+                    printf ("Normal. But Chances of cardiovascular disease.\n\r");
+            }
+            else if (val < 40) {
+                printf ("Low.\n\r");
+                printf ("Note: low apoB levels include the following.\n\r");
+                printf("Liver cirrhosis, Malnutrition, Hyperthyroidism.\n\r");
+            }else if (val < 50) {
+                if (sd && (ct == 2)) {
+                    printf ("Normal. But getting low over time.\n\r");
+                    printf ("Note: low apoB levels include the following.\n\r");
+                    printf("Liver cirrhosis, Malnutrition, Hyperthyroidism.\n\r");
+                }
+            }
+            else 
+                printf ("Normal\n\r");
+            break;
+        case LIPA:
+            printf ("Lipoprotein_A:\n\r");
+            if (val <= 15) {
+                printf ("Normal.\n\r");
+            }else if (val >= 30) {
+                printf ("High. !!! increased risk of atherosclerosis, heart attack, or stroke.\n\r");
+            }
+            else if (val > 15 && sd && (ct == 1)) {
+                printf ("Normal, but increased risk of heart attack or stroke.\n\r");
+            }
+            break;
+        case SHOM:
+            break;
+        case SFIB:
+            break;
+        default:
+            break;
+
+    }
+}
+
 cardiac_panel_ref_t ref_cardiac;
 
 /**
@@ -104,7 +171,7 @@ int parse_csv_cardiac (FILE *fp, users_t *usr) {
  */
 void fill_up_cardiac_ref (cardiac_panel_ref_t *ref_cardiac, int age) {
     ref_cardiac->Apolipoprotein_A1_max = -1;
-    ref_cardiac->Apolipoprotein_A1_min = 120.0; // lower that this will cause cardiovascular disease
+    ref_cardiac->Apolipoprotein_A1_min = 120.0; // lower than this will cause cardiovascular disease
     ref_cardiac->Apolipoprotein_B_max = 125;
     ref_cardiac->Apolipoprotein_B_min = 40;
     ref_cardiac->Lipoprotein_A_max = 10; // the higher cardiovascular risk
@@ -191,6 +258,15 @@ void cardiac_nail_down_predictions (cardiac_panel_ref_t *ref_cardiac, users_t *u
     ret = check_against_ref_value(ref_cardiac->S_Fibrinogen_min,ref_cardiac->S_Fibrinogen_max,usr->cardiac_report[i-1].S_Fibrinogen);
     print_details_analysis (ret,usr->cardiac_report[i-1].S_Fibrinogen,
             ref_cardiac->S_Fibrinogen_min,ref_cardiac->S_Fibrinogen_max,sd_S_Fibrinogen,ct_S_Fibrinogen,"S_Fibrinogen");
+
+    printf ("SUMMARY & PREDICTION:\n\r");
+    print_detail_cardiac_summary (usr->cardiac_report[i-1].Apolipoprotein_A1,
+            ref_cardiac->Apolipoprotein_A1_min,ref_cardiac->Apolipoprotein_A1_max,sd_Apolipoprotein_A1,ct_Apolipoprotein_A1,APA1);
+    print_detail_cardiac_summary (usr->cardiac_report[i-1].Apolipoprotein_B,
+            ref_cardiac->Apolipoprotein_B_min,ref_cardiac->Apolipoprotein_B_max,sd_Apolipoprotein_B,ct_Apolipoprotein_B,APB);
+    print_detail_cardiac_summary (usr->cardiac_report[i-1].Lipoprotein_A,
+            ref_cardiac->Lipoprotein_A_min,ref_cardiac->Lipoprotein_A_max,sd_Lipoprotein_A,ct_Lipoprotein_A,LIPA);
+
     return;
 }
 
