@@ -18,37 +18,39 @@ int check_against_ref_value (float std_min, float std_max, float val) {
         if (val < std_min)
             ret = 1;
     }
-    if (val == std_max)
-        ret = 4;
-    if (val > std_max)
-        ret = 2;
+    if (std_max != -1) {
+        if (val == std_max)
+            ret = 4;
+        if (val > std_max)
+            ret = 2;
+    }
     return ret;
 }
 void print_details_analysis (int ret,float val,float ref_min,float ref_max,float sd,int ct ,char event[120]) {
+    printf ("%s\n\r",event);
+    if (ref_min != -1 && ref_max != -1) {
+        printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
+    }
+    else if (ref_min == -1) {
+        printf ("%f Reference: [min %s - max %f]\n\r",val,"N/A",ref_max);
+    }
+    else if (ref_max == -1) {
+        printf ("%f Reference: [min %f - max %s]\n\r",val,ref_min,"N/A");
+    }
     switch (ret) {
         case 0:
-            printf ("%s\n\r",event);
-            printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
             printf ("Normal\n\r");
             break;
         case 1:
-            printf ("%s\n\r",event);
-            printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
             printf ("Less than min reference\n\r");
             break;
         case 2:
-            printf ("%s\n\r",event);
-            printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
             printf ("More than max reference\n\r");
             break;
         case 3:
-            printf ("%s\n\r",event);
-            printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
             printf ("Reached min reference\n\r");
             break;
         case 4:
-            printf ("%s\n\r",event);
-            printf ("%f Reference: [min %f - max %f]\n\r",val,ref_min,ref_max);
             printf ("Reached max reference\n\r");
             break;
         default:
