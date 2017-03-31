@@ -56,6 +56,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             if (val >= 100 && val <= 125)
                 printf ("You have prediabetes.\n\r");
             else if (val >= 90 && val < 100 && sd && (ct == 1))
+                printf ("Normal.\n\r");
                 printf ("Chances of prediabetes is high.\n\r");
             else if (val > 125)
                 printf ("You have diabetes.\n\r");
@@ -66,8 +67,10 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             printf ("Glucose_PP :\n\r");
             if (val > 140)
                 printf ("You have diabetes.\n\r");
-            else if (val >= 130 && val <=140 && sd && (ct == 1))
+            else if (val >= 130 && val <=140 && sd && (ct == 1)) {
+                printf ("Normal.\n\r");
                 printf ("Good chances of prediabetes.\n\r");
+            }
             else 
                 printf ("Normal.\n\r");
             break;
@@ -98,8 +101,10 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             if (val < 40)
                 printf ("A major risk factor for heart disease.\n\r");
             else if (val >=40 && val <=59) {
-                if (val < 45 && sd && (ct == 2))
+                if (val < 45 && sd && (ct == 2)) {
+                    printf("Normal, The higher, the better.\n\r");
                     printf ("Good chances of risk factor for heart disease.\n\r");
+                }
                 else
                     printf ("Normal, The higher, the better.\n\r");
             }
@@ -128,7 +133,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             if (val > 7.2)
                 printf ("You have High Uric Acid.\n\r");
             else if (val >= 6 && sd && (ct == 1))
-                printf ("Chances of getting Uric Acid is high.\n\r");
+                printf ("Normal,Chances of getting Uric Acid is high.\n\r");
             else 
                 printf ("Normal.\n\r");
             break;
@@ -139,7 +144,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
             if (val > 6)
                 printf ("you have diabetes.\n\r");
             else if (val >= 5.6 && sd && (ct == 1))
-                printf ("Higher change of getting of diabetes.\n\r");
+                printf ("Normal, Higher chance of getting of diabetes.\n\r");
             else
                 printf ("Normal.\n\r");
             break;
