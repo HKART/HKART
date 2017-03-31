@@ -36,6 +36,7 @@
 #define MAX_FILE_NAME 50
 #define MAX_DIABETES_TEST 10
 
+#if 0 /* retiring the codes for now */
 enum diabetes_panel_map {
     GF = 1,
     GP = 2,
@@ -167,7 +168,7 @@ void print_detail_diabets_summary (float val,float min, float max,float sd, floa
     }
     return;
 }
-
+#endif
 diabetes_panel_ref_t ref_diabetes;
 /**
  * parse the csv file for a specific user
@@ -408,6 +409,7 @@ void diabetes_nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t
     print_details_analysis (ret,usr->diabetes_report[i-1].Microalbumin_Urine,
             ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,sd_Microalbumin_Urine,ct_Microalbumin_Urine,"Microalbumin_Urine");
 
+#if 0 /*retiring the code for now */
     printf ("PREDICTIONS and SUMMARY:\n\r");
 
     print_detail_diabets_summary (usr->diabetes_report[i-1].Glucose_Fasting,
@@ -437,6 +439,7 @@ void diabetes_nail_down_predictions (diabetes_panel_ref_t *ref_diabetes, users_t
     print_detail_diabets_summary (usr->diabetes_report[i-1].Microalbumin_Urine,
             ref_diabetes->Microalbumin_Urine_min,ref_diabetes->Microalbumin_Urine_max,sd_Microalbumin_Urine,ct_Microalbumin_Urine,MU);
 
+#endif
     return;
 }
 

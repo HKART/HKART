@@ -36,6 +36,7 @@
 #define MAX_FILE_NAME 50
 #define MAX_CARDIAC_TEST 5
 
+#if 0 /*retiring the code for now */
 enum {
     APA1 = 1,
     APB,
@@ -98,7 +99,7 @@ void print_detail_cardiac_summary (float val,float min, float max,float sd, floa
 
     }
 }
-
+#endif
 cardiac_panel_ref_t ref_cardiac;
 
 /**
@@ -255,6 +256,7 @@ void cardiac_nail_down_predictions (cardiac_panel_ref_t *ref_cardiac, users_t *u
     print_details_analysis (ret,usr->cardiac_report[i-1].S_Fibrinogen,
             ref_cardiac->S_Fibrinogen_min,ref_cardiac->S_Fibrinogen_max,sd_S_Fibrinogen,ct_S_Fibrinogen,"S_Fibrinogen");
 
+#if 0 /*retiring the code for now */
     printf ("SUMMARY & PREDICTION:\n\r");
     print_detail_cardiac_summary (usr->cardiac_report[i-1].Apolipoprotein_A1,
             ref_cardiac->Apolipoprotein_A1_min,ref_cardiac->Apolipoprotein_A1_max,sd_Apolipoprotein_A1,ct_Apolipoprotein_A1,APA1);
@@ -262,7 +264,7 @@ void cardiac_nail_down_predictions (cardiac_panel_ref_t *ref_cardiac, users_t *u
             ref_cardiac->Apolipoprotein_B_min,ref_cardiac->Apolipoprotein_B_max,sd_Apolipoprotein_B,ct_Apolipoprotein_B,APB);
     print_detail_cardiac_summary (usr->cardiac_report[i-1].Lipoprotein_A,
             ref_cardiac->Lipoprotein_A_min,ref_cardiac->Lipoprotein_A_max,sd_Lipoprotein_A,ct_Lipoprotein_A,LIPA);
-
+#endif
     return;
 }
 
